@@ -1,0 +1,136 @@
+{
+  "entities": {
+    "Shift": {
+      "title": "Shift",
+      "description": "Shift attendance record capturing check-in, check-out, and overtime.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "orgId": { "type": "string", "maxLength": 64 },
+        "siteId": { "type": "string", "maxLength": 64 },
+        "workerId": { "type": "string", "maxLength": 64 },
+        "startTimeUtc": { "type": "string", "maxLength": 64 },
+        "endTimeUtc": { "type": "string", "maxLength": 64 },
+        "workDayDate": { "type": "string", "maxLength": 16 },
+        "status": { "type": "string", "enum": ["IN_PROGRESS", "COMPLETED", "FLAGGED_PENDING_REVIEW", "AUTO_CLOSED"] },
+        "checkInMethod": { "type": "string", "maxLength": 32 },
+        "regularHours": { "type": "number" },
+        "overtimeHours": { "type": "number" },
+        "isWithinGeofence": { "type": "boolean" },
+        "idempotencyKey": { "type": "string", "maxLength": 128 }
+      },
+      "required": ["id", "orgId", "siteId", "workerId", "startTimeUtc", "workDayDate", "status"]
+    },
+    "HazardReport": {
+      "title": "HazardReport",
+      "description": "Workplace safety hazard report with SLA tracking.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "orgId": { "type": "string", "maxLength": 64 },
+        "siteId": { "type": "string", "maxLength": 64 },
+        "reporterWorkerId": { "type": "string", "maxLength": 64 },
+        "reporterName": { "type": "string", "maxLength": 128 },
+        "isAnonymous": { "type": "boolean" },
+        "category": { "type": "string", "maxLength": 128 },
+        "severity": { "type": "string", "enum": ["LOW", "MEDIUM", "HIGH", "CRITICAL"] },
+        "description": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["SUBMITTED", "INSPECTING", "RECTIFYING", "RESOLVED", "ESCALATED"] },
+        "targetResponseHours": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 64 },
+        "slaBreachAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "orgId", "siteId", "isAnonymous", "category", "severity", "description", "status"]
+    },
+    "FatigueAlert": {
+      "title": "FatigueAlert",
+      "description": "Attributed fatigue safety threshold alert.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "orgId": { "type": "string", "maxLength": 64 },
+        "workerId": { "type": "string", "maxLength": 64 },
+        "workerName": { "type": "string", "maxLength": 128 },
+        "shiftId": { "type": "string", "maxLength": 128 },
+        "ruleId": { "type": "string", "maxLength": 64 },
+        "ruleDescription": { "type": "string", "maxLength": 256 },
+        "thresholdValue": { "type": "number" },
+        "actualValue": { "type": "number" },
+        "unit": { "type": "string", "maxLength": 32 },
+        "severity": { "type": "string", "enum": ["WARNING", "CRITICAL"] },
+        "isAcknowledged": { "type": "boolean" },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "orgId", "workerId", "ruleId", "severity", "isAcknowledged"]
+    },
+    "FeedbackResponse": {
+      "title": "FeedbackResponse",
+      "description": "Decoupled anonymous sentiment response without user identity keys.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "cycleId": { "type": "string", "maxLength": 64 },
+        "departmentOrTeamId": { "type": "string", "maxLength": 64 },
+        "questionId": { "type": "string", "maxLength": 64 },
+        "scoreRating": { "type": "number" },
+        "feedbackTextScrubbed": { "type": "string", "maxLength": 500 },
+        "submittedDayBucket": { "type": "string", "maxLength": 16 }
+      },
+      "required": ["id", "cycleId", "departmentOrTeamId", "questionId", "scoreRating", "submittedDayBucket"]
+    },
+    "FeedbackParticipation": {
+      "title": "FeedbackParticipation",
+      "description": "Voter participation ledger to prevent double-voting.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "cycleId": { "type": "string", "maxLength": 64 },
+        "workerId": { "type": "string", "maxLength": 64 },
+        "submittedDayBucket": { "type": "string", "maxLength": 16 }
+      },
+      "required": ["id", "cycleId", "workerId", "submittedDayBucket"]
+    },
+    "PayQuery": {
+      "title": "PayQuery",
+      "description": "Worker payslip dispute inquiry.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "payslipId": { "type": "string", "maxLength": 64 },
+        "workerId": { "type": "string", "maxLength": 64 },
+        "workerName": { "type": "string", "maxLength": 128 },
+        "queryType": { "type": "string", "maxLength": 64 },
+        "message": { "type": "string", "maxLength": 1000 },
+        "status": { "type": "string", "enum": ["OPEN", "UNDER_REVIEW", "RESOLVED", "REJECTED"] },
+        "createdAt": { "type": "string", "maxLength": 64 }
+      },
+      "required": ["id", "payslipId", "workerId", "queryType", "message", "status"]
+    }
+  },
+  "firestore": {
+    "/shifts/{shiftId}": {
+      "schema": "Shift",
+      "description": "Collection of employee shift and attendance logs."
+    },
+    "/hazards/{hazardId}": {
+      "schema": "HazardReport",
+      "description": "Safety incident reports and SLA tracking."
+    },
+    "/fatigueAlerts/{alertId}": {
+      "schema": "FatigueAlert",
+      "description": "Attributed workforce overwork and rest threshold alerts."
+    },
+    "/feedbackResponses/{responseId}": {
+      "schema": "FeedbackResponse",
+      "description": "Anonymous sentiment responses in decoupled vault."
+    },
+    "/feedbackParticipation/{participationId}": {
+      "schema": "FeedbackParticipation",
+      "description": "Participation ledger preventing duplicate ballot submission."
+    },
+    "/payQueries/{queryId}": {
+      "schema": "PayQuery",
+      "description": "Worker payslip line dispute inquiries and resolutions."
+    }
+  }
+}

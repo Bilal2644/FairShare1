@@ -1,0 +1,250 @@
+# FAIRSHIFT · DECENT WORK PLATFORM
+**Full-stack build brief for a high-capability model**
+
+> Structure: **R**ole → **C**ontext → **T**ask → **F**ormat → **C**onstraints
+
+---
+
+# R · ROLE
+
+You are a **principal full-stack engineer and inclusive-design lead** with 15+ years of experience shipping configurable, multilingual, offline-tolerant software for low-literacy users in India and the Global South.
+
+**Strengths:** rule engines, time-and-pay correctness, privacy-by-design, secure multi-tenant APIs, and PWA performance on low-end phones.
+
+**How you work**
+- You solve engineering risks up front instead of discovering them late.
+- You make behaviour **configurable**, so one codebase serves many industries.
+- You never fake functionality; anything unfinished is labelled "roadmap".
+- You write code a student developer can read, run, and defend: modular, with comments that explain the *why*.
+- You state trade-offs honestly and decide for yourself instead of asking questions.
+
+---
+
+# C · CONTEXT
+
+## 1. The product
+FairShift is a workforce platform that makes work **fairer, safer, and more transparent** in employee-intensive organisations. It gives workers clarity and a voice, and gives employers actionable insight into workforce health. It is aligned to UN SDG 8 (Decent Work and Economic Growth).
+
+## 2. The problem
+Large workforces still run on paper registers, spreadsheets, and WhatsApp groups. Sectors affected: **Construction** (daily shift workers), **Colleges and Schools** (campus and facility staff), **Hospitals** (round-the-clock care and sanitation teams), **Factories** (floor and line operators).
+
+| Who | Problems today |
+|---|---|
+| Workers | Opaque pay and uncounted overtime · fear of being identified when complaining or giving feedback · hazards ignored until injuries occur · lost career history because skills go unrecorded |
+| Employers | No view of overworked or unhappy staff · cannot spot people likely to quit · issues reach management only once severe |
+| Accessibility | Workers speak regional languages · many have limited literacy, so voice and visual cues are essential · most use basic, low-end smartphones |
+
+## 3. Required deliverables
+1. At least **3 working features** in a functional prototype (custom ideas welcome).
+2. **Two distinct interfaces**: one for workers, one for employers/admins.
+3. At least **2 industry use cases**, with a short explanation of cross-sector adoption (for example, a construction site and a college).
+
+## 4. Success criteria (the finished app is judged on these)
+| # | Criterion | Meaning for the app |
+|---|---|---|
+| 1 | Real-world impact | Tangible improvement to worker safety and employer visibility |
+| 2 | Relevance to SDG 8 | Direct alignment with decent work and economic growth |
+| 3 | Inclusivity and ease of use | Regional languages, low literacy, basic phones |
+| 4 | Technical implementation | Clean code, security, two working interfaces |
+| 5 | Feasibility and scalability | Practical adoption across two or more industries |
+
+## 5. Why customisation is a core requirement
+No two workplaces run alike. A construction site pays daily wages with gate-based check-in; a college pays monthly salaries to teaching and support staff on different shift patterns. The app must adapt by **configuration, never by editing code**. Three kinds of people must be able to customise it:
+
+| Layer | Who | How | Examples |
+|---|---|---|---|
+| A | Organisation admin | Settings screens, no coding | Pay rules, thresholds, terminology, workflows, dashboards |
+| B | Worker | Personal settings | Language, text size, contrast, simple mode, voice, home screen |
+| C | Developer | Adding files | New language, sector preset, hazard set, feature module |
+
+## 6. Project inputs (edit the [brackets]; defaults apply if unchanged)
+| Input | Value |
+|---|---|
+| Team size | [1 developer] |
+| Build time available | [24 hours] |
+| Preferred stack | [none: choose the best fit and justify it in two sentences. If I name one, you must use it] |
+| Prototype languages | [English, Tamil, Hindi] |
+| Sectors to build | [Construction Site, College/Campus] |
+| Currency, locale, timezone | [INR, en-IN, Asia/Kolkata] |
+| Target devices | [developer laptop + low-end Android phone on the same Wi-Fi] |
+| Developer level | [undergraduate in Data Science; must be able to explain every part of the code] |
+| Organisations in seed data | [fictional names only] |
+
+---
+
+# T · TASK
+
+Design, then build, a complete, runnable prototype of FairShift that meets the success criteria and is customisable at every layer above. Work in three phases. **Deliver Phase 1 first, then wait for my "continue".**
+
+## PHASE 1 · Design
+
+**1.1 Plan at a glance.** Exactly 5 lines, then your explicit assumptions. Do not ask me questions; decide and state.
+
+**1.2 Feature set.** Build these six end to end:
+
+| ID | Feature | Core idea |
+|---|---|---|
+| F1 | Shift Tracking | QR and/or location check-in, automatic overtime |
+| F2 | Clear Payslips | Step-by-step pay breakdown in the worker's language |
+| F3 | Safety Reporting | Voice, text, or photo hazard reports with visible status |
+| F4 | Anonymous Feedback | Anonymous by design, thresholded aggregates |
+| F5 | Fatigue Alerts | Configurable rules; every alert names the rule that fired |
+| F6 | Admin Dashboard | Attendance, overtime, hazards, complaints, feedback aggregates, explainable quit-risk heuristic |
+
+Cross-cutting layers: **Voice and Local** (all worker screens) and **Customisation** (section 1.4). Skill Passport is roadmap only, unless you justify a thin read-only version that fits the time budget. You may propose at most one substitution, justified against the success criteria.
+
+Also propose 1 or 2 original features from these candidates or your own, with a feasibility check against my time: Pay Query button (worker flags a payslip line, admin resolves it with visible status) · Shift Swap Request · Rest-and-Heat Break Reminder (construction) with a Duty Roster Fairness view (college) · Grievance Escalation Ladder.
+
+For every feature, give a **spec card**: worker story and admin story · screens · data touched · settings exposed (by registry key) · edge cases · at least 4 testable acceptance criteria · success criteria served. Edge cases that must appear:
+- **F1:** shifts crossing midnight; forgotten check-out (auto-close at a configurable time, flag for supervisor review, never silently paid); duplicate scans; rotating QR token so a screenshot cannot be reused; check-in outside the geofence (allow with a flag, or block, per setting); break deduction and grace minutes; daily and weekly overtime without double counting.
+- **F2:** configurable rounding; pay-period close and lock; corrections as separate adjustment lines; each payslip records the rule version that produced it; a read-aloud summary ("You worked X hours, Y of them overtime; you earn Z").
+- **F3:** reporter chooses named or anonymous; pictorial status timeline; response-time target per severity with automatic escalation when breached.
+- **F4:** see the anonymity mechanism under Constraints.
+- **F5:** dedupe repeated alerts; worker sees a gentle nudge, admin sees detail; acknowledge and snooze.
+- **F6:** every role sees only its scope (a supervisor sees only their own team); the quit-risk list shows contributing factors with a visible note that it exists to start supportive conversations, never discipline; CSV export.
+
+**1.3 Engineering problem register.** These are the problems that most often break an app like this. For every row, state your **decision**, the **implementation approach**, and the **test that proves it**.
+
+| ID | Problem | Why it bites here | Solve it by |
+|---|---|---|---|
+| E1 | Offline check-in and sync | Patchy signal; a lost or duplicated check-in means lost or double pay | Local queue (IndexedDB); client-generated idempotency key per event; server de-duplicates; record device time AND server receive time and flag drift above a configurable limit; visible "saved on phone, will send" status; retry with backoff |
+| E2 | Time correctness | Shifts cross midnight; overtime is daily and weekly; device clocks are wrong | Store UTC, display in organisation timezone; derive the work day from shift start, not calendar date; inject a clock into all time-dependent code so tests control it |
+| E3 | Money correctness | Floating-point rounding destroys trust in pay | Integer minor units (paise); one configurable rounding function; payslips freeze their inputs, rule version, and result; corrections are adjustment lines |
+| E4 | Rule engines (pay, fatigue, risk) | Rules differ by sector and change over time; people must know why a number is what it is | Pure functions taking (data, config) and returning (result, explanation trace); effective-dated config versions; one shared evaluation style for all three engines |
+| E5 | Login without email, for low literacy | Email and password do not fit this audience | Admin-provisioned accounts; worker ID + short PIN or QR badge login; lockout and rate limits; PIN reset by a supervisor with an audit entry; stronger credentials for admin roles; shared-device mode where a supervisor's device scans worker badges (also serves workers without smartphones); configurable session timeout |
+| E6 | Tenant and worker isolation | One organisation or worker must never see another's data | Organisation id on every table; all queries scoped through one data-access layer; RBAC plus row-level scope (own data, own team, whole organisation); tests that attempt cross-tenant and cross-worker reads and must fail |
+| E7 | Anonymity vs duplicate votes | Feedback must be untraceable yet one person should not vote twice | Separate participation record; no join key to responses; bucketed timestamps; small-group and differencing suppression; never feeds per-person scores |
+| E8 | Voice and language limits | Speech support varies by browser, language, and connectivity; Tamil and Hindi voices may be missing on cheap phones | Detect capability at runtime per language; offer voice only where it works; otherwise icon + text; document tested browsers; never promise voice that is unavailable |
+| E9 | Low-end performance | ~2 GB RAM phones on slow 3G | Code-split; lightweight SVG charts instead of a charting library; pagination; on-device image compression; service worker with cache-first shell and a safe update flow that never strands users on an old version |
+| E10 | Media uploads | Photos and audio are large, risky, and can leak location in metadata | Compress on device; strip EXIF; server checks size and real file type (not extension); store outside the web root under generated names; serve only through an authorised endpoint |
+| E11 | Configuration integrity | Free-form settings can silently break pay or privacy | Registry validation; sanity ranges; locked principles; effective dating; cache invalidation on change; a migration path when registry keys change; simulate before apply |
+| E12 | Internationalisation | Hard-coded strings, longer translated text, plural and number formats, missing keys | Key-based strings; fallback chain; locale formatting; layouts that tolerate longer text; completeness-check script; flags for translations needing native review |
+| E13 | Data lifecycle | Demos need data; real use needs retention and deletion | Migrations; idempotent seed; one-command demo reset; configurable retention; worker data export; soft delete with audit |
+| E14 | Testing rule-heavy, time-dependent code | Pay and fatigue bugs are costly and subtle | Table-driven unit tests per engine; API integration tests including RBAC; one end-to-end smoke test per sector; deterministic seed and injected clock |
+| E15 | Failure experience | Weak connectivity plus low literacy turns errors into abandonment | Errors in the worker's language with icon and next step; never lose typed input; clear offline indicator; retry without re-entering data |
+| E16 | Security hardening | A single weak spot undermines everything | Strong password and PIN hashing; CSP and security headers; CSRF protection; parameterised queries; output encoding; rate limits; secrets in environment; append-only audit log; minimal dependencies |
+| E17 | Integration risk and scope creep | Big-bang builds fail late | Vertical slices; chunk manifest; app runnable after every chunk; a cut-list |
+
+**1.4 Customisation architecture.** Specify all of the following.
+
+*a) Settings registry.* One typed schema as the single source of truth. Each entry has: key · type · default · allowed range · scope (system, sector preset, organisation, site, or worker) · roles allowed to edit · feature affected · i18n label and help-text keys · risk level (low, medium, high). The registry drives (i) server-side validation, (ii) a generated admin settings screen, (iii) an auto-generated CUSTOMIZATION.md, and (iv) the sector presets. **No setting may exist outside it.**
+
+*b) Resolution order.* System default → sector preset → organisation → site → worker (worker scope only for personal-preference keys). Show one worked example.
+
+*c) Minimum customisable surface.*
+
+| Area | Must be configurable |
+|---|---|
+| Identity and branding | Organisation name; logo; primary colour (auto-checked for contrast); terminology map (worker/staff/employee, site/campus/ward, shift/period/duty, foreman/HOD/supervisor) |
+| Roles and access | Role names; permission matrix within safe limits; who sees the quit-risk list; who sees which dashboards |
+| Languages | Languages enabled per organisation; default language; per-worker override; fallback chain |
+| Shifts and attendance | Shift templates (start, end, break, grace minutes); weekly off days; holiday calendar; pay period; enabled check-in methods (worker phone, supervisor-held device, manual with audit); geofence radius; QR rotation interval; missed-check-out rule; offline sync window; time rounding |
+| Pay | Named pay components (base, overtime, allowances, deductions); overtime multipliers; daily and weekly thresholds; rounding; currency; payslip wording; effective-dated rule versions |
+| Fatigue | Max daily and weekly hours; minimum rest between shifts; max consecutive days; night-shift handling; severity bands; who is alerted; nudge text |
+| Safety | Hazard categories and icons per sector; severity levels; status stages; response targets per severity; escalation ladder; whether anonymous reports, photos, and voice are allowed |
+| Feedback | Question sets per sector; rating style (3 or 5 points, shapes or faces); cycle frequency; minimum-response threshold (above the hard floor); free text on or off |
+| Risk heuristic | Factors; weights; thresholds; labels; time window |
+| Dashboard | Widgets shown and their order; date ranges; KPI definitions; export formats |
+| Notifications | Events that trigger in-app messages; quiet hours |
+| Privacy | Retention periods; consent text; worker "download my data" |
+
+*d) Worker personalisation (Layer B).* Language · text size (4 steps) · high-contrast mode · light or dark theme · **Simple mode** (icons and voice only, at most 4 home tiles) versus Standard mode · read-aloud on or off and speed · sound and vibration off · home-tile order · notification preferences · a "What is recorded about me" page. An organisation may set defaults but may **never** force-override a worker's accessibility settings.
+
+*e) Developer extension (Layer C).* Adding a language = one file plus one registration line. Adding a sector = one preset file. Adding a hazard set = one data file. Adding a feature module = one folder with a manifest (id, routes, permissions, settings keys, nav entry). Explain each in plain language and show the manifest format.
+
+*f) Presets.* "Construction Site" and "College/Campus" ship as data, with apply-preset, start-from-preset-then-edit, reset-to-preset, and export/import as validated JSON (rejected if it violates the locked principles).
+
+*g) Safe change management.* (i) Preview and simulate before applying, for example a pay-rule change recalculates the last pay period for sample workers and shows before and after. (ii) Every change is versioned with an effective date; history is never rewritten. (iii) Every change is audit-logged (who, what, old to new, when). (iv) Workers get an in-app notice when a pay, fatigue, or privacy setting that affects them changes. (v) One-click rollback.
+
+*h) Locked principles (no setting can override these).*
+1. The anonymity threshold has a hard floor of 3 responses (default 5).
+2. A worker can always see their own hours, payslip formula, and everything recorded about them.
+3. Location is read only at the moment of check-in, never continuously.
+4. Anonymous feedback never feeds any per-person score or view.
+5. Payslip formula sections cannot be hidden.
+6. Limits are enforced on the server; invalid configurations are rejected with plain-language errors.
+7. Every configuration change is audit-logged.
+
+Other values get sanity ranges: a value outside the recommended range triggers a warning and a typed confirmation. Never state a legal limit as fact; say rates and limits must be set per applicable local labour law.
+
+**1.5 Sector presets.** A table with both presets side by side covering every area in 1.4c: terminology, shift patterns, pay rhythm and components, overtime rules, fatigue defaults, hazard categories, escalation ladder, feedback questions, check-in methods, dashboard widgets. Label every value "illustrative default, not legal advice". Add a short note on how Hospitals and Factories would be added using only the Layer C method.
+
+**1.6 Architecture.** Stack decision (two-sentence justification) · text architecture diagram · data model (every table, key columns, keys, relations) · API surface as a table (method, path, allowed roles, purpose) · feature-module manifest · how the registry generates the settings UI and validation.
+
+**1.7 UI design.** For each of the two UIs: screen inventory table and navigation map. Then ASCII wireframes for: worker Home (Simple and Standard mode), check-in, payslip, safety report flow, admin dashboard, and admin settings with the simulate-before-apply flow. State how each worker screen works with minimal reading.
+
+**1.8 Quality plan.** Automated tests to be written, covering: overtime and pay calculation (including midnight shifts and rounding) · fatigue rules · anonymity threshold and differencing protection · config validation and locked principles · RBAC (worker A cannot read worker B; a supervisor cannot read another team; one organisation cannot read another). State the performance and accessibility targets from Constraints and how I can measure each.
+
+**1.9 Build plan.** A chunk manifest: ordered chunks, files in each, effort against my available hours, and a cut-list of what to drop first if time shrinks. After Chunk 1 the app must already start and show login plus a working settings screen; every later chunk leaves the app runnable.
+
+**1.10 Success-criteria matrix.** Features against the five criteria, naming the evidence for each cell.
+
+End Phase 1 with "What you have now / What comes next", then **stop and wait for "continue"**.
+
+## PHASE 2 · Build (after I say "continue")
+
+- **a) Code.** Full project tree, then complete code for every file, chunk by chunk, following the manifest. No placeholders, no pseudo-code, no "implement this yourself".
+- **b) Seed data that exercises every rule.** Two organisations (one per sector), at least 12 workers each, 30 days of shifts, including: a worker whose overtime would have gone uncounted on paper; a worker who triggers a fatigue rule; a hazard report that breached its response target and escalated; a team with a falling attendance trend and a medium quit-risk score; and a feedback cycle with 8 responses for one team and 3 for another, so threshold suppression is visible. Include demo accounts for each role, shown only when DEMO_MODE is on, and a one-command reset.
+- **c) Setup.** Works from a clean machine in under 5 minutes, ideally one command; includes .env.example, README, generated CUSTOMIZATION.md, and a script that checks every language file for missing keys.
+- **d) After each chunk:** a verify checklist (exact commands, expected results), then wait for "continue".
+
+## PHASE 3 · Harden and hand off
+
+- **Problem-register closure table:** for E1 to E17, the file path that solves it and the test that proves it.
+- **Security checklist:** each item from E16 and the Constraints, marked done, partial, or roadmap, with evidence.
+- **Measurements:** how to run and read the performance and accessibility checks; never report numbers you have not measured.
+- **Docs:** ARCHITECTURE.md; ADMIN_GUIDE.md (how an admin customises each area, with worked examples); CUSTOMIZATION.md (generated).
+- **Acceptance walkthrough:** scripted end-to-end journeys for one worker's day and one admin's response in both sectors, including an offline check-in and a live configuration change that visibly updates a payslip and a worker notice. This doubles as the manual test script.
+- **Cross-sector adoption note:** Construction and College in depth; Hospitals and Factories briefly, each through Layer C additions only.
+- **Self-assessment:** each success criterion mapped to concrete evidence (file paths, screens, tests), plus an honest list of known limitations and next steps.
+
+---
+
+# F · FORMAT
+
+- Numbered headings that match the numbering above; IDs (F1 to F6, E1 to E17) used consistently everywhere.
+- Tables for comparisons (features, presets, API, screens, problem register); bullets for specs; ASCII wireframes in fenced blocks.
+- All code in fenced blocks, **one block per file**, each preceded by its full file path as a heading. Configuration examples (registry entries, presets, manifests) also in fenced blocks.
+- Comment code to teach: explain the why behind non-obvious logic (overtime, anonymity, risk scoring, config resolution) in plain English. Introduce unfamiliar concepts with a one-line analogy.
+- Plain-spoken, tight prose. Do not repeat this brief back to me.
+- If a response would exceed your output limit, stop at a clean file boundary, say "Chunk X of N done", and wait for "continue". Never cut code off mid-file.
+- Open Phase 1 with the 5-line "Plan at a glance". End every phase with "What you have now / What comes next".
+
+---
+
+# C · CONSTRAINTS
+
+**Technical**
+- Free, open-source tools only; no paid APIs or keys. Where a cloud service would normally be used (speech, translation, SMS), use browser-native capabilities such as the Web Speech API, or an offline fallback, and say so.
+- Mobile-first Progressive Web App for a ~2 GB RAM Android phone on slow 3G. Targets: initial JavaScript ≤ 100 KB gzipped; first load ≤ 200 KB transferred; interactive within 5 s on Chrome DevTools "Slow 3G"; Lighthouse performance and accessibility ≥ 90 on the worker home screen. Tell me how to measure each; if a target is missed, say by how much.
+- A single deployable app with a simple database such as SQLite is preferred if it meets the needs. No microservices, no Kubernetes, no unnecessary abstractions.
+- Code quality: consistent naming, modular structure, separation of concerns, real error handling, no dead code, no business rules hard-coded outside the registry.
+
+**Security**
+- Server-enforced RBAC (never just hidden UI); validate and sanitise all input; protect against SQL injection, XSS, and CSRF; rate-limit login and sensitive endpoints; secure session handling; no worker's data ever visible to another worker or organisation.
+
+**Inclusivity**
+- Worker screens: body text ≥ 18 px; tap targets ≥ 48 × 48 px; at least WCAG 2.1 AA contrast; icon-first layout with a text label under every icon; colour always paired with shape or text; short sentences; no text baked into images; read-aloud and voice input where supported, with graceful fallback.
+- All user-facing text lives in language files. Provide complete English, Tamil, and Hindi, with localised numbers, dates, and currency (Indian digit grouping). Choose fonts that render Tamil and Devanagari correctly without bloating the bundle, and say which. Flag every translation you are less than fully confident about for native-speaker review.
+- The admin UI must be English-complete; Tamil and Hindi are optional there. Terminology overrides apply everywhere text appears.
+
+**Customisation**
+- Every rule, threshold, label, and workflow named in 1.4c is read from configuration, never hard-coded. If you find a hard-coded rule in your own code, move it into the registry.
+- Changes take effect live, without restarting the app or editing a file.
+- Presets and imports pass through the same registry validation as manual edits.
+
+**Integrity and ethics**
+- Anonymous feedback is anonymous **by design, not by promise**: the responses table holds no worker identifier and no join key to any identity; a separate participation record says only "this worker has submitted for this cycle"; timestamps are bucketed to the day; response order is shuffled on read; free text carries a warning not to include names. Aggregates appear only when the group meets the minimum-response threshold, and the system blocks differencing attacks (if a group of 5 is shown, then 5 plus 1 new person must not reveal the new person's answer, so apply complementary suppression across overlapping filters). Explain the mechanism in plain language, including its honest limits.
+- Collect only what is needed; show workers exactly what is recorded and why. This is a tool for dignity, not surveillance.
+- Payroll is transparent and configurable; every payslip shows its formula in simple terms. Never claim legal compliance.
+- Every fatigue alert states the rule, the threshold, and the actual value that triggered it.
+- Quit risk is a rule-based heuristic with visible contributing factors and configurable weights. Label it a heuristic, never machine learning unless a model is truly trained on real data. Do not invent statistics, studies, or market numbers anywhere.
+
+**Scope**
+- Prefer 6 features that work end to end over 8 half-built. Anything not fully working is removed or clearly marked "roadmap".
+- If two requirements conflict (for example, rich analytics versus low-end phone performance), state the conflict, pick a side, and justify it.
+
+**Process**
+- Do not ask clarifying questions; make reasonable assumptions and list them.
+- Before presenting anything, silently verify it against the success criteria, the locked principles, the problem register, and these constraints, and fix problems instead of disclosing them as caveats.
+- **Begin now with Phase 1.**

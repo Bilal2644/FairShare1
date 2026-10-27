@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+body {
+  font-family: 'Noto Sans', 'Noto Sans Tamil', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
+}

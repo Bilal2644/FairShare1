@@ -1,0 +1,112 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global Safety Net: Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Connection health check
+    match /test/connection {
+      allow read: if true;
+    }
+
+    // Hardened Global Helpers
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'ibubilal123@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    // Shifts Collection
+    match /shifts/{shiftId} {
+      allow get, list: if true;
+      allow create: if isValidId(shiftId) &&
+        incoming().id is string &&
+        incoming().orgId is string &&
+        incoming().workerId is string &&
+        incoming().status in ['IN_PROGRESS', 'COMPLETED', 'FLAGGED_PENDING_REVIEW', 'AUTO_CLOSED'];
+      allow update: if isValidId(shiftId) &&
+        incoming().id == existing().id &&
+        incoming().orgId == existing().orgId &&
+        incoming().workerId == existing().workerId;
+      allow delete: if isAdmin();
+    }
+
+    // Hazards Collection
+    match /hazards/{hazardId} {
+      allow get, list: if true;
+      allow create: if isValidId(hazardId) &&
+        incoming().category is string &&
+        incoming().severity in ['LOW', 'MEDIUM', 'HIGH', 'CRITICAL'] &&
+        incoming().status in ['SUBMITTED', 'INSPECTING', 'RECTIFYING', 'RESOLVED', 'ESCALATED'];
+      allow update: if isValidId(hazardId) &&
+        incoming().id == existing().id &&
+        incoming().orgId == existing().orgId &&
+        incoming().status in ['SUBMITTED', 'INSPECTING', 'RECTIFYING', 'RESOLVED', 'ESCALATED'];
+      allow delete: if isAdmin();
+    }
+
+    // Fatigue Alerts Collection
+    match /fatigueAlerts/{alertId} {
+      allow get, list: if true;
+      allow create: if isValidId(alertId) &&
+        incoming().workerId is string &&
+        incoming().ruleId is string;
+      allow update: if isValidId(alertId) &&
+        incoming().workerId == existing().workerId;
+      allow delete: if isAdmin();
+    }
+
+    // Anonymous Feedback Responses Collection (No voter keys by design)
+    match /feedbackResponses/{responseId} {
+      allow get, list: if true;
+      allow create: if isValidId(responseId) &&
+        incoming().cycleId is string &&
+        incoming().departmentOrTeamId is string &&
+        incoming().scoreRating is number &&
+        incoming().scoreRating >= 1 && incoming().scoreRating <= 5;
+      allow update, delete: if false; // Immutable anonymous ballots
+    }
+
+    // Feedback Participation Ledger (Prevents double votes)
+    match /feedbackParticipation/{participationId} {
+      allow get, list: if true;
+      allow create: if isValidId(participationId) &&
+        incoming().cycleId is string &&
+        incoming().workerId is string;
+      allow update, delete: if false; // Immutable ledger
+    }
+
+    // Pay Queries Collection
+    match /payQueries/{queryId} {
+      allow get, list: if true;
+      allow create: if isValidId(queryId) &&
+        incoming().payslipId is string &&
+        incoming().workerId is string &&
+        incoming().status in ['OPEN', 'UNDER_REVIEW', 'RESOLVED', 'REJECTED'];
+      allow update: if isValidId(queryId) &&
+        incoming().id == existing().id &&
+        incoming().workerId == existing().workerId;
+      allow delete: if isAdmin();
+    }
+  }
+}

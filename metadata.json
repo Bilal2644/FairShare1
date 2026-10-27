@@ -1,0 +1,6 @@
+{
+  "name": "FairShift · Decent Work Platform",
+  "description": "Configurable, multilingual, offline-tolerant workforce dignity platform aligned with UN SDG 8 for employee-intensive organisations.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
